@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #f3eee6;
+  color: #1c1915;
+  font-family: Outfit, "Segoe UI", sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::selection {
+  background: #1c1915;
+  color: #faf7f2;
+}
+
+:focus-visible {
+  outline: 2px solid #b8432f;
+  outline-offset: 3px;
+}
+
+.tone-clay,
+.tone-pine,
+.tone-ink,
+.tone-gold,
+.tone-dusk {
+  position: relative;
+  color: #faf7f2;
+  overflow: hidden;
+}
+
+.tone-clay { background: linear-gradient(155deg, #6e2a1e 0%, #c45c3e 58%, #e4b5a2 140%); }
+.tone-pine { background: linear-gradient(155deg, #14352b 0%, #2f6a54 60%, #d7e4dc 150%); }
+.tone-ink { background: linear-gradient(155deg, #1c1915 0%, #3f3832 55%, #c4b8a8 150%); }
+.tone-gold { background: linear-gradient(155deg, #6d522c 0%, #b08955 58%, #f0e2cb 150%); }
+.tone-dusk { background: linear-gradient(155deg, #243044 0%, #51627f 60%, #d5dbe6 150%); }
+
+.tone-clay::after,
+.tone-pine::after,
+.tone-ink::after,
+.tone-gold::after,
+.tone-dusk::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.28) 0.6px, transparent 0.7px);
+  background-size: 11px 11px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.ticket-edge {
+  background-image: radial-gradient(circle at 0 12px, transparent 8px, #faf7f2 8.5px);
+  background-size: 100% 24px;
+  background-repeat: repeat-y;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

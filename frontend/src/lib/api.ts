@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Public path. Vercel sends /api/* to the backend service with this prefix intact.
 export const api = axios.create({ baseURL: "/api" });
 
 api.interceptors.request.use((config) => {

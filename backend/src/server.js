@@ -13,8 +13,35 @@ const { seed } = require("./seed/seed");
 const app = express();
 const dist = path.join(__dirname, "../../frontend/dist");
 
+let ready;
+function ensureReady() {
+  if (!ready) {
+    ready = (async () => {
+      try {
+        if (!process.env.JWT_SECRET) {
+          throw new Error("JWT_SECRET is missing. Set it on the backend service.");
+        }
+        await connectDB();
+      } catch (error) {
+        ready = undefined;
+        throw error;
+      }
+    })();
+  }
+  return ready;
+}
+
+app.use(async (req, res, next) => {
+  try {
+    await ensureReady();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || "http://localhost:5173" }));
+app.use(cors({ origin: true }));
 app.use(express.json({ limit: "1mb" }));
 if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));
 
@@ -32,11 +59,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 async function start() {
-  if (!process.env.JWT_SECRET) {
-    console.error("JWT_SECRET is missing. Copy backend/.env.example to backend/.env.");
-    process.exit(1);
-  }
-  await connectDB();
+  await ensureReady();
   if (process.env.SEED !== "false") await seed();
   const port = process.env.PORT || 5000;
   app.listen(port, () => console.log(`EventSphere API listening on http://localhost:${port}`));
@@ -49,4 +72,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { app, start };
+module.exports = app;

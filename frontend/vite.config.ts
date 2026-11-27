@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
+      // Used by `npm run dev` only. `vercel dev` routes /api to the backend service.
       "/api": "http://localhost:5000",
     },
   },
